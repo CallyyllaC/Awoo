@@ -1,0 +1,42 @@
+﻿@page "/session"
+@page "/session/{id:int}"
+
+@inject ITabletopSessionService TabletopSessionService
+@inject IUserService UserService
+@inject ITTRPGService TTRPGService
+
+@if (Id == null)
+{
+    <PageTitle>Session Not Found</PageTitle>
+    <h3>Error</h3>
+    <h5>Session Not Found.</h5>
+}
+else
+{
+    <PageTitle>@session.Name</PageTitle>
+    <h3>@session.Id. @session.Name</h3>
+    <h5>by @session.GameMaster.Username</h5>
+}
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    TabletopSession session = new TabletopSession();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+        {
+            //Create a new session
+        }
+        else
+        {
+            session = await TabletopSessionService.GetSession((int)Id);
+        }
+
+
+        await base.OnParametersSetAsync();
+    }
+
+}

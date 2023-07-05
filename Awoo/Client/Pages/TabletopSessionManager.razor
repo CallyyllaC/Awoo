@@ -1,0 +1,139 @@
+﻿@page "/tabletopsessionmanager"
+@inject ITabletopSessionService TabletopSessionService
+@inject IUserService UserService
+@inject ITTRPGService TTRPGService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Tabletop Session Manager</PageTitle>
+
+<h3>Tabletop Sessions</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>GameMaster</th>
+            <th>Game</th>
+            <th>Players</th>
+            <th>NextSession</th>
+            <th>View</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var session in TabletopSessionService.Sessions)
+        {
+            <tr>
+                <td>@session.Name</td>
+                <td>@session.GameMaster.Username</td>
+                <td>@session.Game.Name</td>
+                <td>@string.Join(", ", session.Players)</td>
+                <td>@session.NextSession</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowSession(session.Id))"><i class="oi oi-play-circle"></i></button>
+                </td>
+                <td>
+                    @if (true)
+                    {
+                        <button class="btn btn-primary" @onclick="(() => ManageSession(session.Id))"><i class="oi oi-pencil"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Users</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>View</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in UserService.Users)
+        {
+            <tr style="color: @user.Colour">
+                <td>@user.Username</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowUser(user.Id))"><i class="oi oi-play-circle"></i></button>
+                </td>
+                <td>
+                    @if (true)
+                    {
+                        <button class="btn btn-primary" @onclick="(() => ManageUser(user.Id))"><i class="oi oi-pencil"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>TTRPGs</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>View</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ttrpg in TTRPGService.TTRPGs)
+        {
+            <tr style="color: @ttrpg.Colour">
+                <td>@ttrpg.Name</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowTTRPG(ttrpg.Id))"><i class="oi oi-play-circle"></i></button>
+                </td>
+                <td>
+                    @if (true)
+                    {
+                        <button class="btn btn-primary" @onclick="(() => ManageTTRPG(ttrpg.Id))"><i class="oi oi-pencil"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await TabletopSessionService.GetSessions();
+        await UserService.GetUsers();
+        await TTRPGService.GetTTRPGs();
+        await base.OnInitializedAsync();
+    }
+
+    private void ShowSession(int id)
+    {
+        NavigationManager.NavigateTo($"session/{id}");
+    }
+    private void ShowUser(int id)
+    {
+        NavigationManager.NavigateTo($"user/{id}");
+    }
+    private void ShowTTRPG(int id)
+    {
+        NavigationManager.NavigateTo($"ttrpg/{id}");
+    }
+    private void ManageSession(int id)
+    {
+        NavigationManager.NavigateTo($"edit/session/{id}");
+    }
+    private void ManageUser(int id)
+    {
+        NavigationManager.NavigateTo($"edit/user/{id}");
+    }
+    private void ManageTTRPG(int id)
+    {
+        NavigationManager.NavigateTo($"edit/ttrpg/{id}");
+    }
+
+}
