@@ -18,7 +18,7 @@ namespace Awoo.Shared
         public string Username { get; set; } = "My User";
         public string Password { get; set; } = "My Password";
         public int Colour { get; set; } = Color.White.ToArgb();
-        //public List<TabletopSession> Sessions { get; set; }
+        public List<Availibility> Schedule { get; set; }
 
 
         public override string ToString()

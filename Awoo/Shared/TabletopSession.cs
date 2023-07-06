@@ -14,10 +14,18 @@ namespace Awoo.Shared
         [Key]
         public int Id { get; set; } = 1000;
 
-        public string Name { get; set; } = "Session";
+        public string Name { get; set; }
         public User GameMaster { get; set; }
         public TTRPG Game { get; set; }
         public List<User> Players { get; set; }
+
+        [ForeignKey("Game")]
+        public int GameId { get; set; }
+        [ForeignKey("GameMaster")]
+        public int GameMasterId { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:u}")]
         public DateTime? NextSession { get; set; } = DateTime.Now;
 
         public override string ToString()
